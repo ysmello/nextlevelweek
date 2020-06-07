@@ -1,9 +1,40 @@
-import express from 'express'
+import express from 'express';
 
-const app = express()
+const app = express();
 
-app.get('/', (req, res) => {
-    res.json(['Yuri', 'Claudio'])
-})
+app.use(express.json());
 
-app.listen(8080)
+const users = ['Yuri', 'Claudio', 'Erick', 'Diego'];
+
+app.get('/users/:id', (request, response) => {
+  const id = Number(request.params.id);
+
+  const user = users[id];
+
+  return response.json(user);
+});
+
+app.get('/users', (request, response) => {
+  const search = String(request.query.search);
+
+  const filteredUsers = search
+    ? users.filter((user) => user.includes(search))
+    : users;
+
+  return response.json(filteredUsers);
+});
+
+app.post('/user', (request, response) => {
+  const data = request.body;
+
+  console.log(data);
+
+  const user = {
+    name: 'Yuri Mello',
+    email: 'yuridemeellO@gmail.com'
+  };
+
+  return response.json(user);
+});
+
+app.listen(8080);
